@@ -1,0 +1,6 @@
+name: sga_virsorter
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - virsorter2

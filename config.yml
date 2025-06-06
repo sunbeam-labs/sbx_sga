@@ -2,3 +2,4 @@ sbx_sga:
   mash_ref: /mnt/isilon/marc_genomics/shared_data/RefSeq88n.msh
   checkm_ref: /mnt/isilon/marc_genomics/shared_data/CheckM2_database/uniref100.KO.1.dmnd
   bakta_ref: /mnt/isilon/marc_genomics/shared_data/bakta_db_5/db/
+  virsorter_ref: /mnt/isilon/marc_genomics/shared_data/virsorter2_db/

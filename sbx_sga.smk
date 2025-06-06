@@ -1,10 +1,10 @@
 ISOLATE_FP = Cfg["all"]["output_fp"] / "isolate"
 TOOLS = ["shovill", "mlst", "checkm", "amr", "bakta", "mash"]
 try:
-    SBX_SBA_VERSION = get_ext_version("sbx_sga")
+    SBX_SGA_VERSION = get_ext_version("sbx_sga")
 except NameError:
     # For backwards compatibility with older versions of Sunbeam
-    SBX_SBA_VERSION = "unknown"
+    SBX_SGA_VERSION = "0.0.0"
 
 
 localrules:
