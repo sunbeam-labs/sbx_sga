@@ -52,11 +52,15 @@ rule sga_mash:
         "envs/mash.yml"
     shell:
         """
-        zcat  {input.reads} > {output.agg}
-        mash screen -w -p 8 {params.ref} {output.agg} > {output.win} 2> {log}
-        sort -gr {output.win} > {output.sort} 2>> {log}
-        """
+        zcat {input.reads} > {output.agg}
 
+        if [ -s {output.agg} ]; then
+            mash screen -w -p 8 {params.ref} {output.agg} > {output.win} 2> {log}
+            sort -gr {output.win} > {output.sort} 2>> {log}
+        else
+            touch {output.win} {output.sort}
+        fi
+        """
 
 rule sga_shovill:
     input:
