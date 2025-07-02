@@ -1,0 +1,6 @@
+name: sga_sylph
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - sylph
