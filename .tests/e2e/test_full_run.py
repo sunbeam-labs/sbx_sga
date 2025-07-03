@@ -8,6 +8,9 @@ from pathlib import Path
 @pytest.fixture
 def setup(tmp_path):
     reads_fp = Path(".tests/data/reads/").resolve()
+    snippy_fp = Path(".tests/data/Bfragilis.fasta").resolve()
+    checkm_fp = Path(".tests/data/checkm_test.dmnd").resolve()
+    mash_fp = Path(".tests/data/mash_test.msh").resolve()
 
     project_dir = tmp_path / "project/"
 
@@ -15,9 +18,7 @@ def setup(tmp_path):
 
     config_fp = project_dir / "sunbeam_config.yml"
 
-    config_str = f"sbx_sga: {{mash_ref: '{tmp_path}/dummy.msh'}}"
-    Path(tmp_path / "dummy.msh").touch()
-
+    config_str = f"sbx_sga: {{mash_ref: '{mash_fp}'}}"
     sp.check_output(
         [
             "sunbeam",
@@ -28,9 +29,7 @@ def setup(tmp_path):
         ]
     )
 
-    config_str = f"sbx_sga: {{checkm_ref: '{tmp_path}/dummy.1.dmnd'}}"
-    Path(tmp_path / "dummy.1.dmnd").touch()
-
+    config_str = f"sbx_sga: {{checkm_ref: '{checkm_fp}'}}"
     sp.check_output(
         [
             "sunbeam",
@@ -69,6 +68,17 @@ def setup(tmp_path):
         ]
     )
 
+    config_str = f"sbx_sga: {{snippy_ref: '{snippy_fp}'}}"
+    sp.check_output(
+        [
+            "sunbeam",
+            "config",
+            "--modify",
+            f"{config_str}",
+            f"{config_fp}",
+        ]
+    )
+
     yield tmp_path, project_dir
 
 
@@ -85,11 +95,11 @@ def run_sunbeam(setup):
             "run",
             "--profile",
             project_dir,
-            "all_sga",
-            "all_sga_virus",
+            "test_sga",
+            # "all_sga_virus",
+            "all_sga_snippy",
             "--directory",
             tmp_path,
-            "-n",
             "--include",
             "sbx_sga",
             "--show-failed-logs",

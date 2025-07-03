@@ -348,3 +348,22 @@ rule all_summary:
         final_report=ISOLATE_FP / "final_summary.tsv",
     script:
         "scripts/summarize_all.py"
+
+
+rule test_sga:
+    input:
+        expand(ISOLATE_FP / "mash" / "{sample}_sorted_winning.tab", sample=Samples),
+        expand(
+            ISOLATE_FP / "checkm" / "{sample}" / "quality_report.tsv", sample=Samples
+        ),
+        expand(ISOLATE_FP / "quast" / "{sample}" / "report.tsv", sample=Samples),
+        expand(ISOLATE_FP / "mlst" / "{sample}.mlst", sample=Samples),
+        #expand(ISOLATE_FP / "bakta" / "{sample}" / "{sample}.txt", sample=Samples),
+        expand(ISOLATE_FP / "abritamr" / "{sample}" / "amrfinder.out", sample=Samples),
+        f"{ISOLATE_FP}/reports/shovill.report",
+        f"{ISOLATE_FP}/reports/mlst.report",
+        f"{ISOLATE_FP}/reports/checkm.report",
+        f"{ISOLATE_FP}/reports/amr.report",
+        #f"{ISOLATE_FP}/reports/bakta.report",
+        f"{ISOLATE_FP}/reports/mash.report",
+        f"{ISOLATE_FP}/final_summary.tsv",

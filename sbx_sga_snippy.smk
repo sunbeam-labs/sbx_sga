@@ -11,7 +11,6 @@ localrules:
 
 rule all_sga_snippy:
     input:
-        expand(ISOLATE_FP / "snippy" / "{sample}" / "snps.vcf", sample=Samples),
         ISOLATE_FP / "reports" / "snippy.report",
 
 
@@ -23,7 +22,7 @@ rule sga_snippy:
         vcf=ISOLATE_FP / "snippy" / "{sample}" / "snps.vcf",
         tab=ISOLATE_FP / "snippy" / "{sample}" / "snps.tab",
     params:
-        ref=Cfg["sbx_sga"].get("snippy_ref", "reference.fa"),
+        ref=Cfg["sbx_sga"]["snippy_ref"],
     log:
         LOG_FP / "sga_snippy_{sample}.log",
     benchmark:
@@ -33,7 +32,7 @@ rule sga_snippy:
         "envs/snippy.yml"
     shell:
         """
-        snippy --cpus {threads} --outdir {output.vcf.parent} \
+        snippy --cpus {threads} --outdir $(dirname {output.vcf}) --force \
             --ref {params.ref} --R1 {input.rp1} --R2 {input.rp2} > {log} 2>&1
         """
 
