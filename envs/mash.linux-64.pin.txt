@@ -11,7 +11,7 @@ https://conda.anaconda.org/conda-forge/linux-64/libgcc-ng-15.1.0-h69a702a_3.cond
 https://conda.anaconda.org/conda-forge/linux-64/libgfortran5-15.1.0-hcea5267_3.conda#530566b68c3b8ce7eec4cd047eae19fe
 https://conda.anaconda.org/conda-forge/linux-64/libstdcxx-15.1.0-h8f9b012_3.conda#6d11a5edae89fe413c0569f16d308f5a
 https://conda.anaconda.org/conda-forge/linux-64/libzlib-1.3.1-hb9d3cd8_2.conda#edb0dca6bc32e4f4789199455a1dbeb8
-https://conda.anaconda.org/conda-forge/linux-64/openssl-3.5.0-h7b32b05_1.conda#de356753cfdbffcde5bb1e86e3aa6cd0
+https://conda.anaconda.org/conda-forge/linux-64/openssl-3.5.1-h7b32b05_0.conda#c87df2ab1448ba69169652ab9547082d
 https://conda.anaconda.org/conda-forge/linux-64/capnproto-1.0.2-h766bdaa_3.conda#7ea5f8afe8041beee8bad281dee62414
 https://conda.anaconda.org/conda-forge/linux-64/libgfortran-15.1.0-h69a702a_3.conda#bfbca721fd33188ef923dfe9ba172f29
 https://conda.anaconda.org/conda-forge/linux-64/libstdcxx-ng-15.1.0-h4852527_3.conda#57541755b5a51691955012b8e197c06c
