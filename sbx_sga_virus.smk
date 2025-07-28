@@ -20,6 +20,10 @@ rule all_sga_virus:
             / "{sample}_virus_summary.tsv",
             sample=Samples,
         ),
+        f"{ISOLATE_FP}/reports/genomad_plasmid_classification.report",
+        f"{ISOLATE_FP}/reports/genomad_virus_classification.report",
+        f"{ISOLATE_FP}/reports/genomad_plasmid_genes.report",
+        f"{ISOLATE_FP}/reports/genomad_virus_genes.report",
 
 
 rule sga_genomad_download_db:
@@ -45,11 +49,26 @@ rule sga_genomad_end_to_end:
         contigs=ISOLATE_FP / "shovill" / "{sample}" / "{sample}.fa",
         db_version=Path(Cfg["sbx_sga"]["genomad_ref"]) / "genomad_db" / "version.txt",
     output:
-        assembly_summary=ISOLATE_FP
+        plasmid_summary=ISOLATE_FP
+        / "genomad"
+        / "{sample}"
+        / "{sample}_summary"
+        / "{sample}_plasmid_summary.tsv",
+        virus_summary=ISOLATE_FP
         / "genomad"
         / "{sample}"
         / "{sample}_summary"
         / "{sample}_virus_summary.tsv",
+        plasmid_gene_summary=ISOLATE_FP
+        / "genomad"
+        / "{sample}"
+        / "{sample}_summary"
+        / "{sample}_plasmid_genes.tsv",
+        virus_gene_summary=ISOLATE_FP
+        / "genomad"
+        / "{sample}"
+        / "{sample}_summary"
+        / "{sample}_virus_genes.tsv",
     log:
         LOG_FP / "genomad_end_to_end_{sample}.log",
     benchmark:
@@ -58,12 +77,69 @@ rule sga_genomad_end_to_end:
         "envs/sga_virus.yml"
     shell:
         """
-        ASSEMBLY_SUMMARY_DIR=$(dirname {output.assembly_summary})
+        ASSEMBLY_SUMMARY_DIR=$(dirname {output.plasmid_summary})
         DB_DIR=$(dirname {input.db_version})
         
         if [ ! -s {input.contigs} ]; then
-            touch {output.assembly_summary}
+            touch {output.plasmid_summary}
+            touch {output.virus_summary}
         else
             genomad end-to-end --cleanup --splits 8 {input.contigs} $(dirname "$ASSEMBLY_SUMMARY_DIR") $DB_DIR > {log} 2>&1
         fi
         """
+
+
+rule sga_classification_summary:
+    """Summarizes the plasmid and phage classifications per sample"""
+    input:
+        plasmid_summary=expand(
+            ISOLATE_FP
+            / "genomad"
+            / "{sample}"
+            / "{sample}_summary"
+            / "{sample}_plasmid_summary.tsv",
+            sample=Samples,
+        ),
+        virus_summary=expand(
+            ISOLATE_FP
+            / "genomad"
+            / "{sample}"
+            / "{sample}_summary"
+            / "{sample}_virus_summary.tsv",
+            sample=Samples,
+        ),
+    output:
+        plasmid_summary_report=ISOLATE_FP
+        / "reports"
+        / "genomad_plasmid_classification.report",
+        virus_summary_report=ISOLATE_FP
+        / "reports"
+        / "genomad_virus_classification.report",
+    script:
+        "scripts/genomad.py"
+
+
+rule sga_gene_summary:
+    """Summarizes the genes associated with each of the plasmid and phage classifications per sample"""
+    input:
+        virus_gene_summary=expand(
+            ISOLATE_FP
+            / "genomad"
+            / "{sample}"
+            / "{sample}_summary"
+            / "{sample}_virus_genes.tsv",
+            sample=Samples,
+        ),
+        plasmid_gene_summary=expand(
+            ISOLATE_FP
+            / "genomad"
+            / "{sample}"
+            / "{sample}_summary"
+            / "{sample}_plasmid_genes.tsv",
+            sample=Samples,
+        ),
+    output:
+        plasmid_gene_report=ISOLATE_FP / "reports" / "genomad_plasmid_genes.report",
+        virus_gene_report=ISOLATE_FP / "reports" / "genomad_virus_genes.report",
+    script:
+        "scripts/genomad_gene.py"
