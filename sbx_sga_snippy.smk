@@ -12,6 +12,7 @@ localrules:
 rule all_sga_snippy:
     input:
         ISOLATE_FP / "reports" / "snippy.report",
+        ISOLATE_FP / "iqtree" / "core.full.aln.treefile",
 
 
 rule sga_snippy:
@@ -34,6 +35,45 @@ rule sga_snippy:
         """
         snippy --cpus {threads} --outdir $(dirname {output.vcf}) --force \
             --ref {params.ref} --R1 {input.rp1} --R2 {input.rp2} > {log} 2>&1
+        """
+
+
+rule snippy_core:  # MAl for snippy
+    input:
+        expand(ISOLATE_FP / "snippy" / "{sample}" / "snps.vcf", sample=Samples),
+    output:
+        ISOLATE_FP / "snippy_core" / "core.full.aln",
+    params:
+        ref=Cfg["sbx_sga"]["snippy_ref"],
+    log:
+        LOG_FP / "sga_snippy_core.log",
+    benchmark:
+        BENCHMARK_FP / "sga_snippy_core.tsv"
+    threads: 8
+    conda:
+        "envs/snippy.yml"
+    shell:
+        """
+        cd $(dirname {output}) && snippy-core --prefix core $(dirname {input}) --ref {params.ref} > {log} 2>&1
+        
+        """
+
+
+rule sga_iqtree:  # phylogeny tree
+    input:
+        ISOLATE_FP / "snippy_core" / "core.full.aln",
+    output:
+        ISOLATE_FP / "iqtree" / "core.full.aln.treefile",
+    log:
+        LOG_FP / "sga_iqtree.log",
+    benchmark:
+        BENCHMARK_FP / "sga_iqtree.tsv"
+    conda:
+        "envs/iqtree.yml"
+    shell:
+        """
+        iqtree -s {input} -m MFP -B 1000 -T AUTO -pre $(dirname {input}) > {log} 2>&1
+
         """
 
 

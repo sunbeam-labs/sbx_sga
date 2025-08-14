@@ -1,0 +1,6 @@
+name: sga_iqtree
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - iqtree
