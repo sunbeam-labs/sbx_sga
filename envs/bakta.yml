@@ -4,3 +4,4 @@ channels:
   - bioconda
 dependencies:
   - bakta
+  - diamond=2.1.8
