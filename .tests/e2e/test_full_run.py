@@ -112,7 +112,7 @@ def run_sunbeam(setup):
             "--exclude",
             "all",
             "-n",
-            "all",
+            "skip_decontam",
         ],
         check=True,
     )
