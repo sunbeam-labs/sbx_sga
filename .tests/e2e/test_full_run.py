@@ -112,6 +112,7 @@ def run_sunbeam(setup):
             "--exclude",
             "all",
             "-n",
+            "all",
         ],
         check=True,
     )
