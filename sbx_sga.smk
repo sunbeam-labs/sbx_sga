@@ -448,6 +448,27 @@ rule all_summary:
         "scripts/summarize_all.py"
 
 
+rule clean_sga:
+    input:
+        QC_FP / ".decontam_cleaned",
+        rules.all_sga.input,
+    output:
+        touch(ISOLATE_FP / ".sga_cleaned"),
+    params:
+        log_dir=LOG_FP,
+        benchmark_dir=BENCHMARK_FP,
+    shell:
+        """
+        isolate_dir=$(dirname {output[0]})
+        log_dir={params.log_dir}
+        benchmark_dir={params.benchmark_dir}
+
+        rm -rf $log_dir
+        rm -rf $benchmark_dir
+        find "$isolate_dir/mash" -type f -name "*.fastq" -delete
+        """
+
+
 rule test_sga:
     input:
         f"{ISOLATE_FP}/reports/shovill.report",
