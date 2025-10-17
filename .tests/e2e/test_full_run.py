@@ -107,12 +107,15 @@ def run_sunbeam(setup):
             "run",
             "--profile",
             project_dir,
-            "test_sga",
+            "clean_sga",
+            "all_sga_virus",
+            "all_sga_snippy",
             "--directory",
             tmp_path,
             "--include",
             "sbx_sga",
             "--show-failed-logs",
+            "-n",
         ],
         capture_output=True,
         text=True,
@@ -137,4 +140,4 @@ def run_sunbeam(setup):
 def test_dry_run(run_sunbeam):
     output_fp, benchmarks_fp, proc = run_sunbeam
 
-    assert proc.returncode == 0, f"Sunbeam run failed with error: {proc.stderr}"
+    assert proc.returncode == 0, f"Sunbeam dryrun failed with error: {proc.stderr}"
