@@ -101,6 +101,8 @@ def run_sunbeam(setup):
     log_fp = output_fp / "logs"
     stats_fp = project_dir / "stats"
 
+    sp.run(["sunbeam", "run", "--profile", project_dir, "--exclude", "all", "-n"], check=True)
+
     sbx_proc = sp.run(
         [
             "sunbeam",
