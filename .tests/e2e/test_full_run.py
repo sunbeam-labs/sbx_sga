@@ -101,7 +101,7 @@ def run_sunbeam(setup):
     log_fp = output_fp / "logs"
     stats_fp = project_dir / "stats"
 
-    sp.run(
+    sbx_proc = sp.run(
         [
             "sunbeam",
             "run",
@@ -109,20 +109,6 @@ def run_sunbeam(setup):
             str(project_dir),
             "--skip",
             "decontam",
-            "--exclude",
-            "all",
-            "-n",
-            "skip_decontam",
-        ],
-        check=True,
-    )
-
-    sbx_proc = sp.run(
-        [
-            "sunbeam",
-            "run",
-            "--profile",
-            str(project_dir),
             "clean_sga",
             "all_sga_virus",
             "all_sga_snippy",
