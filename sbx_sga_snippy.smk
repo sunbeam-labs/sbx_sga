@@ -40,7 +40,8 @@ rule sga_snippy:
 
 rule snippy_core:  # MAl for snippy
     input:
-        expand(ISOLATE_FP / "snippy" / "{sample}" / "snps.vcf", sample=Samples),
+        vcf=expand(ISOLATE_FP / "snippy" / "{sample}" / "snps.vcf", sample=Samples),
+        tab=expand(ISOLATE_FP / "snippy" / "{sample}" / "snps.tab", sample=Samples),
     output:
         ISOLATE_FP / "snippy_core" / "core.full.aln",
     params:
@@ -54,8 +55,13 @@ rule snippy_core:  # MAl for snippy
         "envs/snippy.yml"
     shell:
         """
-        cd $(dirname {output}) && snippy-core --prefix core $(dirname {input}) --ref {params.ref} > {log} 2>&1
-        
+        dirs=$(for tab in {input.tab}; do
+            if [ $(wc -l < "$tab") -gt 1 ]; then
+                echo $(dirname "$tab")
+            fi
+        done)
+
+        cd $(dirname {output}) && snippy-core --prefix core $dirs --ref {params.ref} > {log} 2>&1
         """
 
 
