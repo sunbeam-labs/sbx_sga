@@ -78,7 +78,7 @@ rule sga_iqtree:  # phylogeny tree
         "envs/iqtree.yml"
     shell:
         """
-        iqtree -s {input} -m MFP -B 1000 -T AUTO -pre $(dirname {input}) -redo > {log} 2>&1
+        cd $(dirname {output}) && iqtree -s {input} -m MFP -B 1000 -T AUTO -pre $(dirname {input}) -redo > {log} 2>&1
         """
 
 
