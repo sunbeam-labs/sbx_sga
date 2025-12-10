@@ -221,6 +221,32 @@ def test_parse_tsv_sylph_3151(sample_report_fp):
     assert "Actinomyces" in df["Contig_name"].iloc[0]
 
 
+def test_parse_tsv_sylph_3152_empty(sample_report_fp):
+    sample_name = "marc.bacteremia.3152"
+    fp = sample_report_fp("sylph", sample_name, "marc.bacteremia.3152.tsv")
+    df = parse_tsv(fp)
+
+    assert df.empty
+    assert list(df.columns) == [
+        "SampleID",
+        "Sample_file",
+        "Genome_file",
+        "Taxonomic_abundance",
+        "Sequence_abundance",
+        "Adjusted_ANI",
+        "Eff_cov",
+        "ANI_5-95_percentile",
+        "Eff_lambda",
+        "Lambda_5-95_percentile",
+        "Median_cov",
+        "Mean_cov_geq1",
+        "Containment_ind",
+        "Naive_ANI",
+        "kmers_reassigned",
+        "Contig_name",
+    ]
+
+
 def test_parse_tsv_sylph_s234_ori(sample_report_fp):
     sample_name = "s234.ori.lightblue.b"
     fp = sample_report_fp("sylph", sample_name, "s234.ori.lightblue.b.tsv")
