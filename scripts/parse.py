@@ -270,8 +270,25 @@ def parse_all_outputs(
             "Parsing outputs for tool",
             extra={"tool": tool, "file_paths": [str(fp) for fp in fps]},
         )
-        dfs = [parsers[tool](fp, **parser_kwargs.get(tool, {})) for fp in fps]
-        combined_df = pd.concat(dfs, ignore_index=True)
+        dfs = []
+        for fp in fps:
+            try:
+                dfs.append(parsers[tool](fp, **parser_kwargs.get(tool, {})))
+            except Exception:
+                logger.exception(
+                    "Failed to parse file",
+                    extra={"tool": tool, "path": str(fp)},
+                )
+                continue
+
+        if dfs:
+            combined_df = pd.concat(dfs, ignore_index=True)
+        else:
+            logger.error(
+                "No successful parses for tool",
+                extra={"tool": tool, "file_paths": [str(fp) for fp in fps]},
+            )
+            combined_df = pd.DataFrame()
         logger.debug(
             "Combined dataframe for tool",
             extra={"tool": tool, "dataframe": combined_df.to_dict(orient="list")},
